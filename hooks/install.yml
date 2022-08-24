@@ -1,0 +1,10 @@
+---
+- name: Install the Redis operator
+  community.kubernetes.helm:
+    name: redis-operator
+    release_state: present
+    wait: true
+    chart_ref: ot-helm/redis-operator
+    release_namespace: "{{ app_ns }}"
+    create_namespace: false
+...

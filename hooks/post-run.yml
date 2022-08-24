@@ -1,0 +1,9 @@
+---
+- name: Remove the redis operator
+  community.kubernetes.helm:
+    name: redis-operator
+    release_state: absent
+    purge: true
+    wait: true
+    release_namespace: "{{ app_ns }}"
+...

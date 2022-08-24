@@ -1,0 +1,20 @@
+---
+dci_topic: OCP-4.11
+dci_agent: openshift-app        # needed for dci-agent-ctl
+
+# dci-openshift-app-agent settings
+# defaults from /usr/share/dci-openshift-app-agent/group_vars/all
+
+dci_name: "basic-workload"
+dci_configuration: "basic-conf"
+dci_openshift_app_ns: "redis"
+dci_config_dir: /path/to/your/basic/example/dir
+
+# Remove "debug" when your jobs are working to get them in the
+# statistics:
+dci_tags: ["debug", "basic"]
+dci_comment: "Demoing redis operator through app-agent"
+
+# just for ease of use's sake
+helm_version: "3.9.4"
+...

@@ -1,0 +1,67 @@
+---
+- name: Install required rpm packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - curl
+    - python3-openshift
+    - python3-pyyaml
+  become: true
+
+- name: Set namespace fact
+  ansible.builtin.set_fact:
+    app_ns: "{{ dci_openshift_app_ns|default('myns') }}"
+
+- name: Check if helm has been downloaded
+  ansible.builtin.stat:
+    path: "/usr/local/bin/helm-{{ helm_version }}"
+    get_checksum: false
+  register: helm_bin
+
+- name: Create directory for helm artifacts
+  ansible.builtin.file:
+    path: "/tmp/helm-{{ helm_version }}"
+    state: directory
+
+- name: Download helm binary
+  ansible.builtin.unarchive:
+    src: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
+    dest: "/tmp/helm-{{ helm_version }}/"
+    extra_opts:
+      - linux-amd64/helm
+      - --strip-components=1
+    remote_src: true
+    mode: 0644
+  when:
+    - not helm_bin.stat.exists
+
+- name: Copy the helm versioned binary to $PATH
+  become: true
+  ansible.builtin.copy:
+    src: "/tmp/helm-{{ helm_version }}/helm"
+    dest: "/usr/local/bin/helm-{{ helm_version }}"
+    remote_src: true
+    mode: 0755
+  when:
+    - not helm_bin.stat.exists
+
+- name: Symlink to the desired helm version
+  become: true
+  ansible.builtin.file:
+    src: "/usr/local/bin/helm-{{ helm_version }}"
+    dest: /usr/local/bin/helm
+    state: link
+    force: true
+
+- name: Install the Helm repo
+  community.kubernetes.helm_repository:
+    state: present
+    name: ot-helm
+    repo_url: https://ot-container-kit.github.io/helm-charts/
+
+- name: Create the namespace
+  community.kubernetes.k8s:
+    state: present
+    name: "{{ app_ns }}"
+    kind: Namespace

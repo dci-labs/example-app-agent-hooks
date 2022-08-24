@@ -1,0 +1,18 @@
+---
+- name: Wait until livenessProbe starts
+  ansible.builtin.pause:
+    seconds: 10
+
+- name: Search for all running pods
+  community.kubernetes.k8s_info:
+    namespace: "{{ app_ns }}"
+    kind: Pod
+    field_selectors:
+      - status.phase=Running
+  register: redis_service
+
+- name: Fail if pod is NOT found
+  ansible.builtin.fail:
+    msg: "redis is not running"
+  when: redis_service == False
+...
