@@ -1,10 +1,4 @@
 ---
-- name: Remove the Redis Namespace
-  community.kubernetes.k8s:
-    state: absent
-    name: "{{ app_ns }}"
-    kind: Namespace
-
 - name: Remove the Redis repo
   community.kubernetes.helm_repository:
     name: ot-helm

@@ -59,13 +59,4 @@
     state: present
     name: ot-helm
     repo_url: https://ot-container-kit.github.io/helm-charts/
-
-- name: Re-create the namespace
-  community.kubernetes.k8s:
-    state: "{{ item }}"
-    name: "{{ app_ns }}"
-    kind: Namespace
-    wait: true
-  loop:
-    - absent
-    - present
+...
