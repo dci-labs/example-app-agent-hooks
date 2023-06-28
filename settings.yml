@@ -8,7 +8,7 @@ dci_agent: openshift-app        # needed for dci-agent-ctl
 dci_name: "basic-workload"
 dci_configuration: "basic-conf"
 dci_openshift_app_ns: "redis"
-dci_config_dir: /path/to/your/basic/example/dir
+dci_config_dir: %HOOKS_DIR%
 
 # Remove "debug" when your jobs are working to get them in the
 # statistics:
