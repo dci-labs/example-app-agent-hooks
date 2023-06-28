@@ -60,8 +60,11 @@
     name: ot-helm
     repo_url: https://ot-container-kit.github.io/helm-charts/
 
-- name: Create the namespace
+- name: Re-create the namespace
   community.kubernetes.k8s:
-    state: present
+    state: "{{ item }}"
     name: "{{ app_ns }}"
     kind: Namespace
+  loop:
+    - absent
+    - present
