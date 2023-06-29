@@ -5,6 +5,7 @@ dci_agent: openshift-app        # needed for dci-agent-ctl
 # dci-openshift-app-agent settings
 # defaults from /usr/share/dci-openshift-app-agent/group_vars/all
 do_must_gather: false
+do_deprecated_api: false
 
 dci_name: "basic-workload"
 dci_configuration: "basic-conf"
